@@ -4,11 +4,12 @@ import os
 # Configure Gemini
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
-# Fully-qualified model name (CRITICAL)
-model = genai.GenerativeModel("models/gemini-1.5-flash")
+# MOST STABLE & WIDELY AVAILABLE MODEL
+model = genai.GenerativeModel("models/gemini-1.0-pro")
 
 def generate_ai_answer(question, context):
-    prompt = f"""
+    try:
+        prompt = f"""
 You are a senior technical interviewer and career advisor.
 
 Using the document content below:
@@ -25,5 +26,12 @@ Question:
 
 Answer professionally.
 """
-    response = model.generate_content(prompt)
-    return response.text
+        response = model.generate_content(prompt)
+        return response.text
+
+    except Exception as e:
+        # Cloud-safe fallback (never crashes app)
+        return (
+            "⚠️ AI service temporarily unavailable.\n\n"
+            "Please try again later or check API configuration."
+        )
