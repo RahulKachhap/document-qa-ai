@@ -1,30 +1,27 @@
-import subprocess
+import google.generativeai as genai
+import os
+
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+
+model = genai.GenerativeModel("gemini-pro")
 
 def generate_ai_answer(question, context):
     prompt = f"""
 You are a senior technical interviewer and career advisor.
 
-Using the resume content below:
-- Decide if the candidate fits the role
-- Explain strengths
-- Identify gaps
-- Suggest resume improvements
-- Do NOT copy text directly
+Using the document content below:
+- Analyze the question
+- Give reasoning-based advice
+- Suggest improvements
+- Do NOT copy text verbatim
 
-Resume Content:
+Document:
 {context}
 
-User Question:
+Question:
 {question}
 
-Give a professional, helpful answer.
+Answer professionally.
 """
-
-    result = subprocess.run(
-        ["ollama", "run", "llama3"],
-        input=prompt,
-        text=True,
-        capture_output=True
-    )
-
-    return result.stdout.strip()
+    response = model.generate_content(prompt)
+    return response.text
