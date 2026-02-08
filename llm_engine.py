@@ -1,11 +1,11 @@
 import google.generativeai as genai
 import os
 
-# Configure Gemini with API key from Streamlit Secrets
+# Configure Gemini
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
-# Use supported model
-model = genai.GenerativeModel("gemini-1.5-flash")
+# Fully-qualified model name (CRITICAL)
+model = genai.GenerativeModel("models/gemini-1.5-flash")
 
 def generate_ai_answer(question, context):
     prompt = f"""
